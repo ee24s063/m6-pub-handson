@@ -1,0 +1,98 @@
+######## A-sharp
+question    : How many books did Ursula Le Guin write in the 1970s?
+prompt      : prompts\react.txt
+  step 1 -> search_books(""Ursula Le Guin|1970|1979"")  [observation ~35 tok]
+stop reason : FINAL_ANSWER
+llm calls   : 3 / budget 6
+tokens used : ~1347
+final answer: 1
+wall time   : 8.2 s
+trace       : traces\A-sharp.log
+
+######## C-sharp
+question    : Which books were published between 1990 and 1999?
+prompt      : prompts\react.txt
+  step 1 -> search_books("|1990|1999")  [observation ~148 tok]
+  step 3 -> list_books("")  [observation ~838 tok]
+stop reason : STEP_BUDGET
+llm calls   : 6 / budget 6
+tokens used : ~6830
+final answer: null
+wall time   : 39.1 s
+trace       : traces\C-sharp.log
+
+######## A-vague1
+question    : How many books did Ursula Le Guin write in the 1970s?
+prompt      : prompts\react-vague1.txt
+  step 1 -> search_books("Ursula Le Guin|1970|1979")  [observation ~35 tok]
+  step 2 -> list_books("")  [observation ~838 tok]
+stop reason : STEP_BUDGET
+llm calls   : 6 / budget 6
+tokens used : ~6764
+final answer: null
+wall time   : 24.7 s
+trace       : traces\A-vague1.log
+
+######## C-vague1
+question    : Which books were published between 1990 and 1999?
+prompt      : prompts\react-vague1.txt
+  step 1 -> search_books("|1990|1999")  [observation ~148 tok]
+stop reason : FINAL_ANSWER
+llm calls   : 2 / budget 6
+tokens used : ~914
+final answer: The books published between 1990 and 1999 are:
+- "Parable of the Sower" by Octavia E. Butler (1993)
+- "Snow Crash" by Neal Stephenson (1992)
+- "Cryptonomicon" by Neal Stephenson (1999)
+- "The God of Small Things" by Arundhati Roy (1997)
+- "A Suitable Boy" by Vikram Seth (1993)
+wall time   : 6.6 s
+trace       : traces\C-vague1.log
+
+######## A-vague2
+question    : How many books did Ursula Le Guin write in the 1970s?
+prompt      : prompts\react-vague2.txt
+  step 1 -> search_books("Ursula Le Guin|1970|1979")  [observation ~35 tok]
+  step 2 -> list_books("")  [observation ~838 tok]
+stop reason : FINAL_ANSWER
+llm calls   : 4 / budget 6
+tokens used : ~3155
+final answer: 1
+wall time   : 16.1 s
+trace       : traces\A-vague2.log
+
+######## C-vague2
+question    : Which books were published between 1990 and 1999?
+prompt      : prompts\react-vague2.txt
+  step 1 -> search_books("year_from=1990|year_to=1999")  [observation ~34 tok]
+  step 2 -> list_books("")  [observation ~838 tok]
+stop reason : FINAL_ANSWER
+llm calls   : 4 / budget 6
+tokens used : ~3335
+final answer: Please provide the author's name or use the year range format (year_from|year_to) to search for books.
+wall time   : 23.4 s
+trace       : traces\C-vague2.log
+
+######## A-vague3
+question    : How many books did Ursula Le Guin write in the 1970s?
+prompt      : prompts\react-vague3.txt
+  step 1 -> list_books("year=1970")  [observation ~838 tok]
+  step 2 -> search_books("author="Ursula K. Le Guin" AND year=1970")  [observation ~97 tok]
+stop reason : STEP_BUDGET
+llm calls   : 6 / budget 6
+tokens used : ~7318
+final answer: null
+wall time   : 39.8 s
+trace       : traces\A-vague3.log
+
+######## C-vague3
+question    : Which books were published between 1990 and 1999?
+prompt      : prompts\react-vague3.txt
+  step 1 -> list_books("None")  [observation ~838 tok]
+stop reason : FINAL_ANSWER
+llm calls   : 3 / budget 6
+tokens used : ~2720
+final answer: 1990-1999
+wall time   : 19.4 s
+trace       : traces\C-vague3.log
+
