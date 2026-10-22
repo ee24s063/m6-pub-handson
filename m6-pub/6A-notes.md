@@ -168,4 +168,4 @@ The guard lines were **restored** afterwards (`prompts/rag.txt` matches `runs/ra
 - **Maven**: not installed system-wide. `make langchain4j` was run with Apache Maven 3.9.9 unpacked to `~/tools` (SHA-512 verified).
 - **`OllamaLlm`**: copied from `example/` into `src/` and given a 5-minute timeout, a configurable model name and a `toString()` for the run log. The earlier pre-langchain4j copy is in `disabled/`.
 - **`rag.txt`** was edited (see section 3). The two guard lines from task 8 are lines 2–3.
-- The repo is **not under git** yet, so the "commit on your branch" step is still to do.
+- **Commit:** committed on branch `session-6a` (`6e70393`) and merged into `main` through pull request #1.

@@ -19,7 +19,10 @@ Question A has exactly one correct answer: **1** (*The Dispossessed*, 1974). Le 
 | Trace log | Each step records prompt size, the raw reply, the parsed action, the observation and the running total. The summary gives the stop reason, call counts and tokens. |
 | Additions needed in practice | Explained in "Driver fixes the runs forced on me" below. |
 
-`make test` runs 22 tests offline, using a scripted fake LLM.
+`make test` runs **24 tests**:
+
+- 22 offline tests (`AgentLoopTest` and the seed `AgentDriverTest`) using a scripted fake LLM.
+- 2 live tests in `AgentDriverLiveTest` that build the agent with `new OllamaLlm()` and run question A against the real model. They check that the agent used `search_books` first, stopped cleanly, and, if it answered, said 1. The question-A test is **skipped** when no Ollama daemon is listening on `localhost:11434`, so `make test` still works offline. With Ollama running, the full suite takes about a minute.
 
 ---
 
@@ -150,6 +153,11 @@ Correctness fell from 2/2 (sharp, v1) to 1/2 (v2, v3), and the failures were *co
 
 - **Model:** `llama3.2:3b`, not `llama3.1:8b`, because the machine has 8 GB of RAM. Override with `OLLAMA_MODEL`.
 - **Prompt:** [`prompts/react.txt`](prompts/react.txt) is my revised version. It gives the two output formats more explicitly and adds three rules (don't write Observations, don't repeat Actions, answer as soon as you can). The original is kept unchanged as [`react-starter.txt`](prompts/react-starter.txt). The tool-description block is identical apart from the task-4 variants.
-- **Construction sites:** `test/AgentDriverTest.java` still uses `StubLlmClient` so `make test` stays offline. The real model is constructed in the new `src/Main.java`, the "second site" the handout mentions.
-- **Makefile:** same Windows classpath-separator fix as in 6A, plus a `run` target (`make run ARGS='--steps 3 "question"'`).
+- **Construction sites:** the handout names two places to switch from `new StubLlmClient()` to `new OllamaLlm()`.
+  1. **The test site.** The seed `test/AgentDriverTest.java` is unchanged, because it checks for the stub's `"STUB RESPONSE"` text and a literal swap would break it. Instead, `test/AgentDriverLiveTest.java` repeats its tests with `new OllamaLlm()`, and the live question-A test skips itself when Ollama isn't running.
+  2. **The `Main` site.** The new `src/Main.java` uses `new OllamaLlm()` by default (`--stub` switches back).
+- **Makefile:**
+  - Same Windows classpath-separator fix as in 6A, plus a `run` target (`make run ARGS='--steps 3 "question"'`).
+  - **Test classpath fix:** the starter's `test` target ran `java -cp "$(CP)" -jar junit.jar --class-path build`. `java -jar` *ignores* `-cp`, so the langchain4j jars never reached the tests. Any test that constructs `OllamaLlm` failed with `NoClassDefFoundError`. The full classpath now goes to JUnit's own `--class-path`.
+- **Build requirement:** because `src/OllamaLlm.java` is part of the build, `make build` and `make test` need `make langchain4j` to have been run once, as in 6A.
 - **Not used:** `solution/`. Everything here is my own implementation.

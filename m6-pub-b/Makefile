@@ -38,8 +38,10 @@ build: deps
 	@mkdir -p build
 	javac --release 17 -d build -cp "$(CP)" $(SRCS) $(TESTS)
 
+# Note: `java -jar` ignores -cp, so the full classpath (incl. langchain4j)
+# must go to JUnit's own --class-path for tests that build an OllamaLlm.
 test: build
-	java -cp "$(CP)" -jar $(JUNIT_JAR) --class-path build --scan-class-path
+	java -jar $(JUNIT_JAR) --class-path "$(CP)" --scan-class-path build
 
 # Drive the agent: make run ARGS='--steps 3 --trace traces/x.log "question"'
 run: build
