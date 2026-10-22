@@ -17,10 +17,16 @@ TESTS := $(shell find test -name '*.java' 2>/dev/null)
 
 # When langchain4j is installed, include every jar under libs/langchain4j
 # in the compile and run classpath; otherwise we build against the stubs.
-LC4J_CP := $(shell [ -d $(LC4J_DIR) ] && find $(LC4J_DIR) -name '*.jar' 2>/dev/null | paste -sd ':' -)
-CP      := $(JUNIT_JAR)$(if $(LC4J_CP),:$(LC4J_CP),):build
+# Java's classpath separator is ';' on Windows and ':' elsewhere.
+ifeq ($(OS),Windows_NT)
+SEP := ;
+else
+SEP := :
+endif
+LC4J_CP := $(shell [ -d $(LC4J_DIR) ] && find $(LC4J_DIR) -name '*.jar' 2>/dev/null | paste -sd '$(SEP)' -)
+CP      := $(JUNIT_JAR)$(if $(LC4J_CP),$(SEP)$(LC4J_CP),)$(SEP)build
 
-.PHONY: deps build test clean langchain4j
+.PHONY: deps build test run clean langchain4j
 
 deps: $(JUNIT_JAR)
 
@@ -30,10 +36,14 @@ $(JUNIT_JAR):
 
 build: deps
 	@mkdir -p build
-	javac --release 17 -d build -cp $(CP) $(SRCS) $(TESTS)
+	javac --release 17 -d build -cp "$(CP)" $(SRCS) $(TESTS)
 
 test: build
-	java -cp $(CP) -jar $(JUNIT_JAR) --class-path build --scan-class-path
+	java -cp "$(CP)" -jar $(JUNIT_JAR) --class-path build --scan-class-path
+
+# Drive the agent: make run ARGS='--steps 3 --trace traces/x.log "question"'
+run: build
+	java -cp "$(CP)" Main $(ARGS)
 
 # One-shot: pull langchain4j and its transitive deps into libs/langchain4j/.
 # Requires Maven on the PATH.  Re-run if you bump the version in pom.xml.
