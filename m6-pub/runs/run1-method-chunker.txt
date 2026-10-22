@@ -1,0 +1,139 @@
+javac --release 17 -d build -cp "libs/junit.jar;libs/langchain4j/annotations-13.0.jar;libs/langchain4j/api-0.30.0.jar;libs/langchain4j/commons-codec-1.17.1.jar;libs/langchain4j/commons-compress-1.27.1.jar;libs/langchain4j/commons-io-2.16.1.jar;libs/langchain4j/commons-lang3-3.16.0.jar;libs/langchain4j/converter-jackson-2.9.0.jar;libs/langchain4j/gson-2.10.1.jar;libs/langchain4j/jackson-annotations-2.16.1.jar;libs/langchain4j/jackson-core-2.16.1.jar;libs/langchain4j/jackson-databind-2.16.1.jar;libs/langchain4j/jna-5.14.0.jar;libs/langchain4j/kotlin-stdlib-1.9.10.jar;libs/langchain4j/kotlin-stdlib-common-1.9.10.jar;libs/langchain4j/kotlin-stdlib-jdk7-1.9.10.jar;libs/langchain4j/kotlin-stdlib-jdk8-1.9.10.jar;libs/langchain4j/langchain4j-0.36.0.jar;libs/langchain4j/langchain4j-core-0.36.0.jar;libs/langchain4j/langchain4j-embeddings-0.36.0.jar;libs/langchain4j/langchain4j-embeddings-all-minilm-l6-v2-0.36.0.jar;libs/langchain4j/langchain4j-ollama-0.36.0.jar;libs/langchain4j/okhttp-4.12.0.jar;libs/langchain4j/okio-3.6.0.jar;libs/langchain4j/okio-jvm-3.6.0.jar;libs/langchain4j/onnxruntime-1.20.0.jar;libs/langchain4j/opennlp-tools-1.9.4.jar;libs/langchain4j/retrofit-2.9.0.jar;libs/langchain4j/slf4j-api-2.0.16.jar;libs/langchain4j/tokenizers-0.30.0.jar;build" src/Chunk.java src/Embedder.java src/LlmClient.java src/Main.java src/MiniLmEmbedder.java src/OllamaLlm.java src/RagAssistant.java src/RepoIndexer.java src/RetrievalEval.java src/StubEmbedder.java src/StubLlmClient.java test/RagAssistantTest.java test/RepoIndexerTest.java
+java -cp "libs/junit.jar;libs/langchain4j/annotations-13.0.jar;libs/langchain4j/api-0.30.0.jar;libs/langchain4j/commons-codec-1.17.1.jar;libs/langchain4j/commons-compress-1.27.1.jar;libs/langchain4j/commons-io-2.16.1.jar;libs/langchain4j/commons-lang3-3.16.0.jar;libs/langchain4j/converter-jackson-2.9.0.jar;libs/langchain4j/gson-2.10.1.jar;libs/langchain4j/jackson-annotations-2.16.1.jar;libs/langchain4j/jackson-core-2.16.1.jar;libs/langchain4j/jackson-databind-2.16.1.jar;libs/langchain4j/jna-5.14.0.jar;libs/langchain4j/kotlin-stdlib-1.9.10.jar;libs/langchain4j/kotlin-stdlib-common-1.9.10.jar;libs/langchain4j/kotlin-stdlib-jdk7-1.9.10.jar;libs/langchain4j/kotlin-stdlib-jdk8-1.9.10.jar;libs/langchain4j/langchain4j-0.36.0.jar;libs/langchain4j/langchain4j-core-0.36.0.jar;libs/langchain4j/langchain4j-embeddings-0.36.0.jar;libs/langchain4j/langchain4j-embeddings-all-minilm-l6-v2-0.36.0.jar;libs/langchain4j/langchain4j-ollama-0.36.0.jar;libs/langchain4j/okhttp-4.12.0.jar;libs/langchain4j/okio-3.6.0.jar;libs/langchain4j/okio-jvm-3.6.0.jar;libs/langchain4j/onnxruntime-1.20.0.jar;libs/langchain4j/opennlp-tools-1.9.4.jar;libs/langchain4j/retrofit-2.9.0.jar;libs/langchain4j/slf4j-api-2.0.16.jar;libs/langchain4j/tokenizers-0.30.0.jar;build" Main
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+Indexed 52 chunk(s) from sample-repo in 791 ms [chunker=METHOD, embedder=MiniLmEmbedder[all-MiniLM-L6-v2@langchain4j-0.36.0, dim=384], llm=OllamaLlm[llama3.2:3b]]
+
+=== Q: Where is the fine for an overdue loan computed?
+  hit: sample-repo\com\example\core\Loan.java:45-54
+  hit: sample-repo\com\example\core\LoanRegistry.java:34-42
+  hit: sample-repo\com\example\api\ReportService.java:28-30
+  hit: sample-repo\com\example\api\LibraryService.java:43-45
+  hit: sample-repo\com\example\util\FinePolicy.java:27-36
+  hit: sample-repo\com\example\core\Loan.java:33-35
+  hit: sample-repo\com\example\util\FinePolicy.java:9-13
+  hit: sample-repo\com\example\core\Loan.java:37-39
+--- A: The fine for an overdue loan is computed by the `computeFine` method in the `FinePolicy` interface, specifically the `StandardFinePolicy` class, which multiplies the number of days late by a daily fine amount (PER_DAY) and applies a cap (CAP) to the result.
+--- (2.8 s)
+
+=== Q: What class holds the catalogue of books, and how is it indexed?
+  hit: sample-repo\com\example\util\Catalog.java:11-15
+  hit: sample-repo\com\example\core\Book.java:6-11
+  hit: sample-repo\com\example\util\Catalog.java:23-25
+  hit: sample-repo\com\example\api\LibraryService.java:47-49
+  hit: sample-repo\com\example\util\Catalog.java:19-21
+  hit: sample-repo\com\example\core\Book.java:27-29
+  hit: sample-repo\com\example\util\Catalog.java:27-40
+  hit: sample-repo\com\example\api\LibraryService.java:30-41
+--- A: The catalogue of books is held by the `Catalog` class, which uses a `HashMap` to store books keyed by ISBN. The catalogue is indexed by ISBN, as indicated by the comment "In-memory catalogue keyed by ISBN". The `findByIsbn` method is used to retrieve a book by its ISBN.
+--- (2.6 s)
+
+=== Q: How does the system decide a loan has been returned?
+  hit: sample-repo\com\example\core\Loan.java:45-54
+  hit: sample-repo\com\example\core\Loan.java:37-39
+  hit: sample-repo\com\example\core\Loan.java:33-35
+  hit: sample-repo\com\example\core\LoanRegistry.java:24-32
+  hit: sample-repo\com\example\core\Loan.java:6-10
+  hit: sample-repo\com\example\core\LoanRegistry.java:8-12
+  hit: sample-repo\com\example\core\LoanRegistry.java:34-42
+  hit: sample-repo\com\example\core\Loan.java:29-31
+--- A: A loan is considered returned when the `returnedOn` field is not null. This is determined by the `isOverdue` method, which returns false when `returnedOn` is not null, indicating that the loan has been returned.
+--- (2.1 s)
+
+=== Q: What is the maximum fine the policy allows?
+  hit: sample-repo\com\example\util\FinePolicy.java:9-13
+  hit: sample-repo\com\example\util\FinePolicy.java:27-36
+  hit: sample-repo\com\example\util\FinePolicy.java:22-22
+  hit: sample-repo\com\example\api\LibraryService.java:43-45
+  hit: sample-repo\com\example\util\FinePolicy.java:15-15
+  hit: sample-repo\com\example\core\Member.java:41-49
+  hit: sample-repo\com\example\util\FinePolicy.java:17-19
+  hit: sample-repo\com\example\core\Loan.java:6-10
+--- A: The maximum fine the policy allows is 500 rupees, as stated in the comment of the `StandardFinePolicy` class. This value is represented by the `CAP` constant, which is set to `new BigDecimal("500.00")`.
+--- (2.1 s)
+
+=== Q: Which methods write to the loan registry?
+  hit: sample-repo\com\example\core\LoanRegistry.java:8-12
+  hit: sample-repo\com\example\core\LoanRegistry.java:16-18
+  hit: sample-repo\com\example\api\ReportService.java:11-16
+  hit: sample-repo\com\example\core\LoanRegistry.java:34-42
+  hit: sample-repo\com\example\core\LoanRegistry.java:24-32
+  hit: sample-repo\com\example\core\Loan.java:45-54
+  hit: sample-repo\com\example\core\LoanRegistry.java:20-22
+  hit: sample-repo\com\example\core\Loan.java:6-10
+--- A: The `record` method writes to the loan registry. It adds a new `Loan` object to the `history` list. The `record` method is located in the `LoanRegistry` class, specifically at lines 16-18.
+--- (2.1 s)
+
+=== Q: How many books can a member have on loan at the same time?
+  hit: sample-repo\com\example\core\Member.java:41-49
+  hit: sample-repo\com\example\core\Loan.java:6-10
+  hit: sample-repo\com\example\core\Book.java:6-11
+  hit: sample-repo\com\example\core\Loan.java:19-23
+  hit: sample-repo\com\example\api\LibraryService.java:30-41
+  hit: sample-repo\com\example\api\ReportService.java:32-43
+  hit: sample-repo\com\example\core\Loan.java:25-27
+  hit: sample-repo\com\example\core\LoanRegistry.java:24-32
+--- A: A member can have at most 5 open loans at the same time. This is enforced by the `addLoan` method in the `Member` class, which checks if the member has already reached the cap of 5 open loans before adding a new loan.
+--- (2.2 s)
+
+=== Q: How long is the standard loan term before a loan becomes overdue?
+  hit: sample-repo\com\example\core\Loan.java:45-54
+  hit: sample-repo\com\example\core\Loan.java:6-10
+  hit: sample-repo\com\example\api\ReportService.java:28-30
+  hit: sample-repo\com\example\core\LoanRegistry.java:34-42
+  hit: sample-repo\com\example\core\Loan.java:37-39
+  hit: sample-repo\com\example\core\Loan.java:33-35
+  hit: sample-repo\com\example\util\FinePolicy.java:27-36
+  hit: sample-repo\com\example\core\Member.java:41-49
+--- A: The standard loan term is 21 days. This value is defined in the `Loan` class as `public static final int DEFAULT_TERM_DAYS = 21;`.
+--- (1.6 s)
+
+=== Q: How does searching the catalogue by title work?
+  hit: sample-repo\com\example\util\Catalog.java:11-15
+  hit: sample-repo\com\example\util\Catalog.java:27-40
+  hit: sample-repo\com\example\api\LibraryService.java:47-49
+  hit: sample-repo\com\example\util\Catalog.java:23-25
+  hit: sample-repo\com\example\util\Catalog.java:19-21
+  hit: sample-repo\com\example\core\Book.java:6-11
+  hit: sample-repo\com\example\util\Catalog.java:42-50
+  hit: sample-repo\com\example\api\LibraryService.java:30-41
+--- A: Searching the catalogue by title works by converting the input string to lowercase and then checking if it contains a substring of the book's title (case-insensitive). The search is not intended for production use due to lack of tokenization. This is implemented in the `searchByTitle` method.
+--- (2.3 s)
+
+=== Q: When are two Book objects considered equal?
+  hit: sample-repo\com\example\core\Book.java:47-55
+  hit: sample-repo\com\example\core\Book.java:6-11
+  hit: sample-repo\com\example\core\Book.java:19-25
+  hit: sample-repo\com\example\util\Catalog.java:42-50
+  hit: sample-repo\com\example\api\LibraryService.java:30-41
+  hit: sample-repo\com\example\util\Catalog.java:19-21
+  hit: sample-repo\com\example\core\Member.java:51-53
+  hit: sample-repo\com\example\core\Book.java:27-29
+--- A: Two Book objects are considered equal if they share an ISBN. This is determined by the `equals` method, which checks if the `isbn` fields of the two objects are equal.
+--- (1.7 s)
+
+=== Q: How are loans counted per genre for reporting?
+  hit: sample-repo\com\example\api\ReportService.java:32-43
+  hit: sample-repo\com\example\api\ReportService.java:11-16
+  hit: sample-repo\com\example\core\LoanRegistry.java:8-12
+  hit: sample-repo\com\example\api\ReportService.java:20-22
+  hit: sample-repo\com\example\core\Loan.java:6-10
+  hit: sample-repo\com\example\core\LoanRegistry.java:16-18
+  hit: sample-repo\com\example\core\Member.java:41-49
+  hit: sample-repo\com\example\core\LoanRegistry.java:24-32
+--- A: Loans are counted per genre for reporting by merging the genre of each loan into a map, where the genre is the key and the count is the value. The count starts at 1 for each genre and is incremented by 1 for each loan of that genre. This is done in the `loansByGenre()` method, which returns a `Map<String, Integer>`.
+--- (3.0 s)
+
+=== Q: How does the Spring Boot REST controller authenticate users with JWT tokens?
+  hit: sample-repo\com\example\core\Book.java:35-37
+  hit: sample-repo\com\example\core\Member.java:25-27
+  hit: sample-repo\com\example\core\Member.java:19-23
+  hit: sample-repo\com\example\core\Member.java:33-35
+  hit: sample-repo\com\example\core\Member.java:29-31
+  hit: sample-repo\com\example\core\Book.java:6-11
+  hit: sample-repo\com\example\util\Catalog.java:42-50
+  hit: sample-repo\com\example\core\Book.java:57-60
+--- A: I do not find that in the passages.
+--- (0.7 s)
+
